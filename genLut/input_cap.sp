@@ -1,7 +1,7 @@
 Input Capacitance Obtainment
 
 .param freq = 1Meg
-.param vp = 1v
+.param vp = 0.55v
 .csparam freq = {freq}
 .include "./tuned_45nm_HP.pm"
 
