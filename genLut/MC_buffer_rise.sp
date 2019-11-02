@@ -52,7 +52,7 @@ Circuit to perform Monte Carlo simulation in ngspice at rise edge
     save @xbuf[v] all
     tran 10p 4n 
     meas tran delay trig v(pin) val='0.5*vp' rise=1 targ v(pout) val='0.5*vp' rise=2
-    meas tran out_slew  trig v(pout) val='0.055' rise=2 targ v(pout) val='0.495' rise=2
+    meas tran out_slew  trig v(pout) val='0.055' rise=1 targ v(pout) val='0.495' rise=2
     print delay >> delay.log
     print out_slew >> slew.log
     destroy all
