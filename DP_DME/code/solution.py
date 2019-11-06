@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: mac
 # @Date:   2019-10-14 15:57:10
-# @Last Modified by:   mac
-# @Last Modified time: 2019-10-16 10:26:39
+# @Last Modified by:   Eric Xu
+# @Last Modified time: 2019-11-06 15:31:23
 import math
 from scipy import interpolate
 import copy
@@ -58,26 +58,40 @@ def readSinkLocations(sink_num,slew_list=list(range(50,60,2)), file_path="s1r1.t
     f.close()
     return sink_solutions
 
+def readntvLUT(lutfile='../../genLut/lut_fall.txt',option=0):
+	lut_array = np.zeros((7,7))
+	with open(lutfile) as f:
+		f.readline() # skip first line 
+		for i in range(7): # slew for
+			for j in range(7): # cap for 
+				lut_array[i,j] = f.readline().split(" ")[option]
+	return lut_array
+
 #初始化CBuf查找表和插值函数
-def init_cbuf(x,y):
+def init_cbuf():
+	x = 
+	y = 
 	z = [[60,65,70,75,80],[55,60,65,70,75],[50,55,60,65,70],[45,50,55,60,65],[40,45,50,55,60]]
 	f = interpolate.interp2d(x, y, z,kind='cubic')
 	return f
 #初始DBuf查找表和插值函数
 def init_dbuf(x,y):
-	z = [[500,550,600,650,700],[550,600,650,700,750],[600,650,700,750,800],[650,700,750,800,850],[700,750,800,850,900]]
+	# z = [[500,550,600,650,700],[550,600,650,700,750],[600,650,700,750,800],[650,700,750,800,850],[700,750,800,850,900]]
+	z = readntvLUT(option=0)
 	f = interpolate.interp2d(x, y, z,kind='cubic')
 	return f 
 #初始化PBuf查找表和插值函数
 def init_pbuf(x,y):
-	z = [[1,2,3,4,5],[2,3,4,5,6],[3,4,5,6,7],[4,5,6,7,8],[5,6,7,8,9]]
+	# z = [[1,2,3,4,5],[2,3,4,5,6],[3,4,5,6,7],[4,5,6,7,8],[5,6,7,8,9]]
+	z = readntvLUT(option=4)
 	f = interpolate.interp2d(x, y, z,kind='cubic')
 	return f
 #确定输入slew和负载电容的范围和步长，并初始化CBuf, DBuf, PBuf
 def initialize():
-	slew_bd = np.arange(50,100,10) #ps
-	cap_bd = np.arange(50,100,10) #fF
-	cbuf = init_cbuf(slew_bd,slew_bd)
+	slew_bd = np.arange(50,85,5) #ps
+	cap_bd = np.arange(15,50,5) #fF
+	# cbuf = init_cbuf(slew_bd,slew_bd)
+	cbuf = init_cbuf()
 	dbuf = init_dbuf(slew_bd,cap_bd) #ps
 	pbuf = init_pbuf(slew_bd,cap_bd) #uW
 	return cbuf,dbuf,pbuf

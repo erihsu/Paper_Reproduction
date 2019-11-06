@@ -1,0 +1,46 @@
+ISPD 2009 Clock Synthesis contest
+
+This file explains the example package together with the evaluation script.
+
+//--------------------------------------------------------------------------//
+//--------------------------------------------------------------------------//
+Files in this package:
+
+tuned_45nm_HP.pm : model card for ngspice simulation
+clkinv0.subckt   : spice subckt file describing an inverter
+eval2009.pl      : evaluation script
+explain_s1_s1s   : Notes on the sample input file "s1" and sample output file "s1s"
+s1               : sample input file
+s1s              : sample output file
+s1.diff_names    : sample input file; the problem is exactly the same as s0, with different node/buf/wireType name
+s1s.diff_names   : sample output file; exactly same clock routing as s1s, with different node/buf/wireType name
+s1.pdf           : explanation of s1 and s1s with pictures
+
+//--------------------------------------------------------------------------//
+//--------------------------------------------------------------------------//
+How to use eval2009.pl?
+
+** to show help message
+./eval2010.pl
+or
+./eval2010.pl -h
+
+** to run eval2009
+./eval2010.pl -s ispd10cnsSample.in ispd10cnsSample.out tuned_45nm_HP.pm
+
+"-s" is to prevent abort when slew violation exists in the example.
+
+RESULTS WILL BE LIKE THIS:
+ispd10cnsSample.in ispd10cnsSample.out wLCS 5.862 (ps) C 4587.744 (s 245.000 b 1380.000 w 2962.744)(fF) maxNominalSkew 60.660
+
+It shows that using the clock routing "ispd10cnsSample.out", the worst local clock skew is 5.862ps while the total capacitance of clock network is 4587.744fF
+
+If you want to see the clock latency at all clock sinks, you can use "-v" switch
+./eval2009.pl -v1 ispd10cnsSample.in ispd10cnsSample.out tuned_45nm_HP.pm
+
+NOTES:
+You must have ngspice in your PATH.
+You must have perl in /usr/bin/
+
+//--------------------------------------------------------------------------//
+//--------------------------------------------------------------------------//
