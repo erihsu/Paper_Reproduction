@@ -1,9 +1,9 @@
 Input Capacitance Obtainment
-
+* the file is used to measure input capacitance of buffer
 .param freq = 1Meg
 .param vp = 0.55v
 .csparam freq = {freq}
-.include "./tuned_45nm_HP.pm"
+.include "./PTM45/tuned_45nm_HP.pm"
 
 mp1  0 pin 0 0 pmos l=45n w=2.0u
 mn1  0 pin 0 0 nmos l=45n w=1.37u

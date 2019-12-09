@@ -9,7 +9,8 @@ Circuit to perform Monte Carlo simulation in ngspice at fall edge
 .control 
   let mc_runs = 200
   let run = 1
-  set sourcepath = (/Users/mac/Desktop/lut)
+  * change the source file path to your filepath
+  set sourcepath = (/Users/mac/Paper_Reproduction/genLut/spice)
   source buffer.sp 
 
 * max power dissipation during charge and discharge in a clock period

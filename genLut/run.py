@@ -1,3 +1,8 @@
+################################################################################################## 
+# The script is used to generate delay & output slew look-up table(LUT) of different buffer size.#
+# The result will be located in "buflib" folder after execution    						 #
+##################################################################################################
+
 import numpy as np 
 import os
 
@@ -12,7 +17,7 @@ buffer_size_lib = {'X1':[2,1.37],'X2':[4,2.74],
 				   'X5':[32,21.92]}
 
 def get_lut(option="fall",i=0,j=0):
-	string2 = "ngspice -o MC_buffer_{}.log MC_buffer_{}.sp".format(option,option)
+	string2 = "ngspice -o MC_buffer_{}.log ./sim_ctrl/MC_buffer_{}.sp".format(option,option)
 	os.system(string2)
 
 	result1 = np.loadtxt('delay.log',delimiter=' ',usecols=(2)).astype(np.float32)
@@ -37,16 +42,16 @@ def get_lut(option="fall",i=0,j=0):
 def main():
 	for key,value in buffer_size_lib.items():
 		os.system("sed -i -e 's/pmos l=45n w=[0-9]*\.?[0-9]+u/pmos l=45n w={}u/g' \
-						  -e 's/nmos l=45n w=[0-9]*\.?[0-9]+u/nmos l=45n w={}u/g' buffer.sp".format(value[0],value[1]))
+						  -e 's/nmos l=45n w=[0-9]*\.?[0-9]+u/nmos l=45n w={}u/g' ./spice/buffer.sp".format(value[0],value[1]))
 		for i,slew_in in enumerate(slew_in_list):
 			for j,cap_load in enumerate(cap_load_list):
 				os.system("sed -i -e 's/capload = [0-9]\+fF/capload = {}fF/g' \
-								  -e 's/slew_in = [0-9]\+ps/slew_in = {}ps/g' buffer.sp".format(cap_load,slew_in))
+								  -e 's/slew_in = [0-9]\+ps/slew_in = {}ps/g' ./spice/buffer.sp".format(cap_load,slew_in))
 				get_lut("fall",i,j)
 				get_lut("rise",i,j)
 
-		os.mkdir("./{}".format(key))
-		with open('./{}/lut_fall.txt'.format(key),'w') as f1, open('./{}/lut_rise.txt'.format(key),'w') as f2:
+		os.mkdir("./buflib/{}".format(key))
+		with open('./buflib/{}/lut_fall.txt'.format(key),'w') as f1, open('./buflib/{}/lut_rise.txt'.format(key),'w') as f2:
 			f1.write("delay(miu){}delay(sigma){}slew(miu){}slew(sigma){}power{}input_slew{}output_cap\n".format(' '*12,' '*12,' '*12,' '*12,' '*12,' '*12,' '*12))
 			f2.write("delay(miu){}delay(sigma){}slew(miu){}slew(sigma){}power{}input_slew{}output_cap\n".format(' '*12,' '*12,' '*12,' '*12,' '*12,' '*12,' '*12))
 			for i in range(len(slew_in_list)):

@@ -1,5 +1,5 @@
 Circuit to perform Monte Carlo simulation in ngspice
-
+* the buffer is construct by two inverters as common structure
 .param capload = 45fF
 .param slew_in = 80ps
 .param vp = 0.55v
@@ -12,7 +12,7 @@ Circuit to perform Monte Carlo simulation in ngspice
 .param tfall  = '1.25*slew_in'
 
 
-.include "./tuned_45nm_HP.pm"
+.include "./PTM45/tuned_45nm_HP.pm"
 * vsrc with repeat
 v1 pin 0 pwl
 + 0ns                       'vp'
